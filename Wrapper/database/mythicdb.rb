@@ -1,6 +1,9 @@
 require_relative 'DBAPI'
+require 'json'
 
 # Adapt DBAPI to get useful M+ information
+# See comments in DBAPI.rb for details on functions 
+#
 class MythicDB < DBAPI
 =begin
   prep to turn this into a singleton class object
@@ -15,6 +18,7 @@ class MythicDB < DBAPI
 
   # set up database config here
   def initialize
+    # probably move to a more secure location
     super("sql9.freesqldatabase.com", "3306", "sql9628659", "diZSARZDK5")
 
     # table name and fields
@@ -37,7 +41,6 @@ class MythicDB < DBAPI
   # get rating of a player from db
   def get_rating(name, realm)
     out = lookup_name(name, realm)
-    puts out
     rating = nil
     rating = out if !out.empty?
     return rating
