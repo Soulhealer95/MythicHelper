@@ -34,7 +34,7 @@ class DBAPI
 
   # execute a raw sql query  (select)
   def query_raw(query)
-#    puts "Debug: " + query 
+    puts "Debug: " + query 
     res = @client.query(query)
     return res.entries
   end
@@ -225,12 +225,13 @@ class DBAPI
   #   fields                hash     name of the column => value to look for
   #                                  defaults to ALL (*)
   #   conditions            hash     keys=>values to filter on
+  #   extra_opts            string   string with any additional options
   # @returns
   #  result-set from query
   #
   # example usage:
   # get_field("mythic_rank", ["rating"], {"name" => "'#{username}'"})
-  def get_field(tabl_name, fields=nil, conditions=nil)
+  def get_field(tabl_name, fields=nil, conditions=nil, extra_opts=nil)
     stmt = "SELECT "
     if !fields
       stmt = stmt +  " *  "
@@ -247,8 +248,11 @@ class DBAPI
         stmt = stmt + " " + key + " = " + val 
         stmt = stmt + " AND " if key != conditions.keys.last
       end
-      stmt = stmt + ';'
     end
+    if extra_opts != nil
+      stmt = stmt + " " + extra_opts
+    end
+    stmt = stmt + ';'
     return query_raw(stmt)
   end
 

@@ -9,6 +9,7 @@ module Blizzard_Links
     :realm_info  => "/data/wow/realm/{realm_slug}",
     :connected_index => "/data/wow/connected-realm/",
     :keystone_lead =>  "/data/wow/connected-realm/{realm_id}/mythic-leaderboard/",
-    :char_profile => "/profile/wow/character/{realmSlug}/{characterName}"
+    :char_profile => "/profile/wow/character/{realm_slug}/{characterName}",
+    :mythic_profile => "/profile/wow/character/{realm_slug}/{characterName}/mythic-keystone-profile"
   }
 end

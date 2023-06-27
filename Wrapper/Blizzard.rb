@@ -114,5 +114,15 @@ class BlizzardAPI < Request
                          {"namespace": 'dynamic-us' })
     return out
   end
+  def getMythicProfile(username)
+    profile_link = BAPI[:mythic_profile].gsub "{realm_slug}", @realm_slug
+    profile_link = profile_link.gsub "{characterName}", username
+    out = get_with_token(BAPI[:api_url] + profile_link,
+                         @token.token,
+                         {},
+                         {"namespace": 'profile-us' })
+    return out
+
+  end
 
 end

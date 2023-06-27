@@ -5,9 +5,14 @@ require_relative "DBAPI"
 
 
 realm = "Sargeras"
-username= "ixys"
-=begin
+username= "Brewaholic"
 raid = RaiderAPI.new(username, realm)
+out = raid.AllRuns
+
+
+#puts data["keystone_affixes"]
+#File.write("log.txt", out)
+=begin
 bliz = BlizzardAPI.new(username, realm)
 
 puts "Summary for " + username
@@ -24,9 +29,8 @@ elem =  JSON.parse(out.body)
 puts elem
 =end
 
-db = MythicDB.new
-puts db.get_rating(username, realm)
-
+#db = MythicDB.new
+#puts db.get_app_rank("shiv", realm)
 #stmt = "CREATE TABLE mythic_rank (rank int,name varchar(255), realm varchar(255), rating int)"
 #out = db.create_table("mythic", ["rank%v", "rating%i"])
 #out = db.insert_table_c("mythic_rank", {"rank" => "103", "name" => username, "realm" => realm, "rating" => "666"})
