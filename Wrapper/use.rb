@@ -8,7 +8,7 @@ class MythicBot
   def initialize(token)
     @token = token
     @bot = Discordrb::Commands::CommandBot.new token: @token, prefix: '!'
-    @db = mythicdb.new
+    @db = MythicDB.new
     setupCommands()
     @bot.run
   end
