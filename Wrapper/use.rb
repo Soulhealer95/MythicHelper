@@ -14,12 +14,15 @@
 
 require_relative "RaiderAPI"
 require_relative "MythicDB"
+require_relative "parser"
 require 'discordrb'
 
 
 class MythicBot
-  def initialize(token)
-    @token = token
+  def initialize()
+    confobj = GetConfig.new(self)
+    config = confobj.getconf
+    @token = config["token"]
     @bot = Discordrb::Commands::CommandBot.new token: @token, prefix: '!'
     @db = MythicDB.new
     setupCommands()
@@ -106,6 +109,4 @@ class MythicBot
 
 end
 
-
-token = 'MTExMzYyOTY0NjA5ODAxNDMxOQ.GkhUBS.gmLHkY8rcXpansiDY5R468o99s36BNmekjDVJo'
-MythicBot.new(token)
+MythicBot.new

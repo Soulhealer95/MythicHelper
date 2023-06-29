@@ -14,6 +14,7 @@
 
 
 require_relative 'DBAPI'
+require_relative 'parser'
 
 # Adapt DBAPI to get useful M+ information
 class MythicDB < DBAPI
@@ -30,10 +31,12 @@ class MythicDB < DBAPI
 
   # set up database config here
   def initialize
-    super("sql9.freesqldatabase.com", "3306", "sql9628659", "diZSARZDK5")
+    confinit = GetConfig.new(self)
+    config = confinit.getconf
+    super(config["hostname"], config["port"], config["username"], config["password"])
 
     # table name and fields
-    @leaderboard = "mythictable"
+    @leaderboard = "mythictable_prod"
     @fields = {
                "name" => nil,
                "realm" => nil,
@@ -87,7 +90,7 @@ class MythicDB < DBAPI
   def init_board
     keys = @fields.keys
     create_table(@leaderboard, ["#{keys[0]}%v", "#{keys[1]}%v",
-                                "#{keys[2]}%i"], "PRIMARY KEY(rating)")
+                                "#{keys[2]}%i"])
   end
 
 
