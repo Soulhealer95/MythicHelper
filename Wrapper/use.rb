@@ -100,6 +100,7 @@ class MythicBot
   end
 
   def PrettyPrintRuns(data)
+    return "No Data Found!" if !data || data == []
     str = ""
     data.each do |key, val|
       str = str +  "#{key}:\nFortified (#{'%02d' % val["Fortified"][1]}) #{'%06.2f' % val["Fortified"][0]}   | |    Tyrannical (#{'%02d' % val["Tyrannical"][1]}) #{'%06.2f' % val["Tyrannical"][0]}\n"

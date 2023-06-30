@@ -16,7 +16,7 @@
 require_relative 'DBAPI'
 require_relative 'parser'
 
-# Adapt DBAPI to get useful M+ information
+# Extend DBAPI to get useful M+ information
 class MythicDB < DBAPI
 =begin
   prep to turn this into a singleton class object
