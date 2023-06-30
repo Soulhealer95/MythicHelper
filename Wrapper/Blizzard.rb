@@ -2,14 +2,17 @@ require 'oauth2'
 
 require_relative "Request"
 require_relative 'blizzard_api_index'
+require_relative 'parser'
 include Blizzard_Links
 
 class BlizzardAPI < Request
 
   def initialize(name, realm)
+    configobj = GetConfig.new(self)
+    config = configobj.getconf
     super # @name, @realm, get_with_token
-    @key = '9fb32de2afb347a9a577e2b49bab7ca2'
-    @secret = '2cc45F1ETQrzhI0F1EKKsaizMJp1UWvo'
+    @key = config["key"]
+    @secret = config["secret"]
     @callback_url = "http://127.0.0.1:3000"
     @token = nil
     @realm_id = nil

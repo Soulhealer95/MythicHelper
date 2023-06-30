@@ -93,6 +93,5 @@ class MythicDB < DBAPI
                                 "#{keys[2]}%i"])
   end
 
-
 end
 
