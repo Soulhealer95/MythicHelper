@@ -3,6 +3,8 @@
 require_relative "MythicAPI_UI"
 require_relative "RaiderAPI"
 require_relative "MythicDB"
+require_relative "MythicObjects"
+
 # require_relative "Blizzard.rb" -- Not used atm
 
 class MythicAPI < MythicAPI_UI
@@ -13,9 +15,14 @@ class MythicAPI < MythicAPI_UI
     # it should be up for any use
     @db = MythicDB.new
 
+    ## init a character pool
+    @char_pool = CharCache.new
+
+    # init APIs
+    @raid = RaiderIO_API.new
+    #@bilz = nil - Not Used ATM
+
     # These should be lazily instantiated
-    @raid = nil
-    @bilz = nil
     @name = nil
     @realm = nil
     @region = nil
@@ -25,28 +32,23 @@ class MythicAPI < MythicAPI_UI
 
   # region is not used for now as only US is supported
   # so we're making it optional
-  def MythicRating(name, realm, region=nil)
-    MythicInit(name, realm)
-    rating = @raid.MythicRating
-    # Update Rating in DB whenever anyone uses it
-    # To build our DB
-    if rating
-      @db.add_rating(name, realm, rating)
-      return rating
+  def MythicRating(name, realm, region="us")
+    char = MythicInit(name, realm)
+    rating = char.getRating
+
+    # get data remotely and parse
+    if !rating
+      data = @raid.getCharacterData(name, realm, region)
+      rating = data["mythic_plus_scores_by_season"][0]["scores"]["all"]
+      char.setRating(rating)
     end
-    return DataError(name, realm)
+
+    return DataError(name, realm) if !rating
+    return rating
   end
 
   def MythicRuns(name, realm, region=nil)
     MythicInit(name, realm)
-    runs = @raid.MythicRuns
-    if runs
-      # pretty print runs here perhaps
-      # or keep this API as raw as possible and 
-      # let client handle the pretty print
-
-      return runs
-    end
     return DataError(name, realm)
   end
 
@@ -59,14 +61,6 @@ class MythicAPI < MythicAPI_UI
   # we can add handlers in the future
   def MythicRank(type, name, realm, region=nil)
     MythicInit(name, realm)
-    # these will be needed by any number of handlers 
-    # in the same instance so lets instantiate them
-    # so we dont have to keep passing them
-    @name = name
-    @realm = realm
-    rank = type
-    next_rank = MythicRank_World(rank)
-    return next_rank if next_rank
     return DataError(name, realm)
   end
 
@@ -86,18 +80,18 @@ class MythicAPI < MythicAPI_UI
   # any future public additions here
 
   private
+  # Formats the error as discord bot would expect it
+  #
+  # @params name [String] name of character
+  # @params realm [String] realm of character
   def DataError(name, realm)
     return "No Data Found For Player #{name}-#{realm}"
   end
-  def MythicInit(name, realm, region=nil)
 
-    # TODO - do any sanity checks here
-    @raid = RaiderAPI.new(name, realm)
-
-    # TODO - do any sanity checks here
-    # PS This isn't used atm but
-    # might be required in the future, uncomment below at that time
-    # @bliz = BlizzardAPI.new(name, realm)
+  # returns a character object from the pool
+  # (see #CharCache)
+  def MythicInit(name, realm, region="us")
+    return @char_pool.getChar(name, realm, region)
   end
 
   def MythicRank_World(rank)

@@ -18,13 +18,27 @@
 # Use string.gsub to replace {} variables
 module Blizzard_Links
   BAPI = {
+    # OAUTH Links
     :api_url => "https://us.api.blizzard.com",
     :auth_url => "https://oauth.battle.net",
+    # Realm Links
     :realm_index => "/data/wow/realm/index",
     :realm_info  => "/data/wow/realm/{realm_slug}",
     :connected_index => "/data/wow/connected-realm/",
     :keystone_lead =>  "/data/wow/connected-realm/{realm_id}/mythic-leaderboard/",
+    # Profile Data Links
     :char_profile => "/profile/wow/character/{realm_slug}/{characterName}",
-    :mythic_profile => "/profile/wow/character/{realm_slug}/{characterName}/mythic-keystone-profile"
+    :mythic_profile => "/profile/wow/character/{realm_slug}/{characterName}/mythic-keystone-profile",
+    # Game Data Links
+    :affix_index => "/data/wow/keystone-affix/index",
+    :affix_info => "/data/wow/keystone-affix/{keystoneAffixId}",
+    :affix_media => "/data/wow/media/keystone-affix/{keystoneAffixId}",
+    :dungeon_index => "/data/wow/mythic-keystone/dungeon/index",
+    :dungeon_info => "/data/wow/mythic-keystone/dungeon/{dungeonId}",
+    :keystone_index => "/data/wow/mythic-keystone/index",
+    :period_index => "/data/wow/mythic-keystone/period/index",
+    :period_info => "/data/wow/mythic-keystone/period/{periodId}",
+    :season_index => "/data/wow/mythic-keystone/season/index",
+    :season_info => "/data/wow/mythic-keystone/season/{seasonId}"
   }
 end

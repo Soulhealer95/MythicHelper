@@ -24,9 +24,7 @@ $debug = nil
 # TO simplify everything, I created a request class to perform all API calls
 # these can be extended to work with various APIs
 class Request
-  def initialize(name, realm)
-    @name = name
-    @realm = realm
+  def initialize
   end
 
   # Given a URL, make a GET call to retrieve the data
@@ -51,13 +49,14 @@ class Request
       out = JSON.parse(response.body)
       return out
     end
-    puts "Couldn't get Data!" + response.body
-    return
+    # This should be error
+    puts response.body if $debug
+    return nil
   end
 
-  def get_with_token(url, token, header={}, params= {})
+  def get_with_token(url, token, params={}, header={})
     def_header = {'Authorization'=> "Bearer #{token}"}
-    def_query = {:namespace => "static-us", :region => 'us'}
+    def_query = {}
 
     headers = def_header.merge(header)
     query = def_query.merge(params)
