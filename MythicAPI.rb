@@ -43,8 +43,12 @@ class MythicAPI < MythicAPI_UI
 
   # Override Functions with Implementations
 
-  # region is not used for now as only US is supported
-  # so we're making it optional
+  # Get a Character's M+ Rating
+  #
+  # @params name    [String] name of character
+  # @params realm   [String] name of realm
+  # @params region  [String] name of region, default to 'us'
+  # @returns Rank   [Int] Rank of the Character
   def MythicRating(name, realm, region="us")
     char = MythicInit(name, realm)
     rating = char.getRating
@@ -63,6 +67,12 @@ class MythicAPI < MythicAPI_UI
     return rating
   end
 
+  # Get runs for a character
+  #
+  # @params   name    [String] name of character
+  # @params   realm   [String] name of realm
+  # @params   region  [String] name of region, default to 'us'
+  # @returns  Runs    [CharRuns] Character runs object
   def MythicRuns(name, realm, region="us")
     char = MythicInit(name, realm)
     if char.getRunStatus
@@ -96,6 +106,11 @@ class MythicAPI < MythicAPI_UI
   # - app Rank (DB) 
   # that way if we add more types of ranks like guild
   # we can add handlers in the future
+  # @params type    [String] type of rank requested
+  # @params name    [String] name of character
+  # @params realm   [String] name of realm
+  # @params region  [String] name of region, default to 'us'
+  # @returns Rank   [Int] Rank of the Character
   def MythicRank(type, name, realm, region="us")
     char = MythicInit(name, realm)
     out = MythicRank_RaiderIO(char, type)
@@ -103,20 +118,6 @@ class MythicAPI < MythicAPI_UI
     return DataError(name, realm) if !out
     return out
   end
-
-  # Facade interface - Additional Options
-  def WorldRank(name, realm, region=nil)
-    return MythicRank("world", name, realm)
-  end
-
-  def ServerRank(name, realm, region=nil)
-    return MythicRank("realm", name, realm) 
-  end
-
-  def AppRank(name, realm, region=nil)
-    return MythicRank("app", name, realm)
-  end
-
   # any future public additions here
 
   private
@@ -128,8 +129,13 @@ class MythicAPI < MythicAPI_UI
     return "No Data Found For Player #{name}-#{realm}"
   end
 
-  # returns a character object from the pool
-  # (see #CharCache)
+  # Init M+ information
+  # set weekly_affix if not set
+  #
+  # @params name    [String] name of character
+  # @params realm   [String] name of realm for character
+  # @params region  [String] name of region, default to 'us'
+  # @returns char   [CharObject] a character object from the pool
   def MythicInit(name, realm, region="us")
     # TODO - make this update every week
     if !@weekly_affix 
@@ -138,6 +144,8 @@ class MythicAPI < MythicAPI_UI
     return @char_pool.getChar(name, realm, region)
   end
 
+  # Handlers for Rank chain of responsibilty pattern
+  # (see #MythicRank)
   def MythicRank_RaiderIO(char, type)
     if type.include?("world") || type.include?("realm")
       if !char.getRank(type)
@@ -156,7 +164,8 @@ class MythicAPI < MythicAPI_UI
     return MythicRank_App(char, type)
   end
 
-  # to be set - this is on the caller
+  # Handlers for Rank chain of responsibilty pattern
+  # (see #MythicRank)
   def MythicRank_App(char, type)
     if type.include?("app")
       if !char.getRank(type)

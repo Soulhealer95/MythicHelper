@@ -15,7 +15,7 @@
 require_relative 'MythicAPI'
 require 'discordrb'
 
-
+# Discord Bot using Mythic API
 class MythicBot
   def initialize()
     confobj = GetConfig.new(self)
@@ -30,6 +30,14 @@ class MythicBot
     # run bots
     @bot.run
   end
+  
+  # set up various commands using discordrb wrapper
+  # Supported commands:
+  #   - rating    - M+ Helper
+  #   - runs      - M+ Runs
+  #   - nextbest  - Best Dungeon to run next (Suggestion)
+  #   - apprank   - Rank among app users
+  #   - rank      - Overall world rank
   def setupCommands
     # M+ Rating
     @bot.command(:rating,  min_args: 2, max_args: 2, description: 'Get your Mythic+ Rating.', usage: 'rating [charactername] [realm]') do |_event, username, realm|
@@ -62,7 +70,10 @@ class MythicBot
   end
 
   private
-  # Mostly formatting dungeons
+  # Parse data and get next best dungeon
+  #
+  # @parse data [MythicRuns] Runs data from Mythic Character Object
+  # @return out [String] Dungeon - Level 
   def NextBest(data)
     min = [ 999, ""]
     affix = @mythic_api.instance_variable_get(:@weekly_affix)
@@ -88,15 +99,21 @@ class MythicBot
     return out
   end
 
+  # Print Runs data 
+  #
+  # @parse data [MythicRuns] Runs data from Mythic Character Object
+  # @return out [String] Dungeon and affix data printed
   def PrettyPrintRuns(data)
     return "No Data Found!" if !data || data == []
     str = ""
     data.each do |key, val|
-      str = str +  "#{key}:\nFortified (#{'%02d' % val["Fortified"][1]}) #{'%06.2f' % val["Fortified"][0]}   | |    Tyrannical (#{'%02d' % val["Tyrannical"][1]}) #{'%06.2f' % val["Tyrannical"][0]}\n"
+      str = str +  "#{key}:\nFortified (#{'%02d' % val["Fortified"][1]}) "
+      str = str + "#{'%06.2f' % val["Fortified"][0]}   | |    Tyrannical (#{'%02d' % val["Tyrannical"][1]}) #{'%06.2f' % val["Tyrannical"][0]}\n"
     end
     return str
   end
 
 end
 
+# Start the Bot instance
 MythicBot.new
