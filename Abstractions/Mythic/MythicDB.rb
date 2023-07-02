@@ -18,17 +18,6 @@ require_relative '../General/config_parser'
 
 # Extend DBAPI to get useful M+ information
 class MythicDB < DBAPI
-=begin
-  prep to turn this into a singleton class object
-  @instance = new
-
-  private_class_method :new
-
-  def self.instance
-    @instance
-  end
-=end
-
   # set up database config here
   def initialize
     confinit = GetConfig.new(self)
@@ -70,6 +59,7 @@ class MythicDB < DBAPI
     end
   end
 
+  # get rank of a player from db
   def get_app_rank(name, realm)
     realmf = format_s(realm)
     # get everything
@@ -87,6 +77,7 @@ class MythicDB < DBAPI
     create_table(@leaderboard, ["#{keys[0]}%v", "#{keys[1]}%v",
                                 "#{keys[2]}%i"])
   end
+  # format strings into something db would accept
   def format_s(str)
     return "'#{str}'"
   end

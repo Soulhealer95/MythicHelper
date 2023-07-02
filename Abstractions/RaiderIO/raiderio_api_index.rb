@@ -15,6 +15,7 @@
 
 # Use string.gsub to replace {} variables
 module RaiderIO_Links
+  # Index of all links for raiderIO
   RAPI = {
     # Primary Link
     :api_url              => "https://raider.io",

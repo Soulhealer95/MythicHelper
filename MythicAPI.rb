@@ -12,15 +12,14 @@
 #  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Implementation of MythicAPI Interface 
 
 require_relative "Abstractions/RaiderIO/RaiderAPI"
 require_relative "Abstractions/Mythic/MythicAPI_UI"
 require_relative "Abstractions/Mythic/MythicDB"
 require_relative "Abstractions/Mythic/MythicObjects"
-
 # require_relative "Blizzard.rb" -- Not used atm
 
+# Implementation of MythicAPI Interface 
 class MythicAPI < MythicAPI_UI
 
   def initialize
@@ -45,10 +44,10 @@ class MythicAPI < MythicAPI_UI
 
   # Get a Character's M+ Rating
   #
-  # @params name    [String] name of character
-  # @params realm   [String] name of realm
-  # @params region  [String] name of region, default to 'us'
-  # @returns Rank   [Int] Rank of the Character
+  # @param  name    [String] name of character
+  # @param  realm   [String] name of realm
+  # @param  region  [String] name of region, default to 'us'
+  # @return [Int] Rank of the Character
   def MythicRating(name, realm, region="us")
     char = MythicInit(name, realm)
     rating = char.getRating
@@ -69,10 +68,10 @@ class MythicAPI < MythicAPI_UI
 
   # Get runs for a character
   #
-  # @params   name    [String] name of character
-  # @params   realm   [String] name of realm
-  # @params   region  [String] name of region, default to 'us'
-  # @returns  Runs    [CharRuns] Character runs object
+  # @param   name    [String] name of character
+  # @param   realm   [String] name of realm
+  # @param   region  [String] name of region, default to 'us'
+  # @return  [CharRuns] Character runs object
   def MythicRuns(name, realm, region="us")
     char = MythicInit(name, realm)
     if char.getRunStatus
@@ -99,18 +98,20 @@ class MythicAPI < MythicAPI_UI
     return DataError(name, realm)
   end
 
-  # lets do a pseudo chain-of responsibilty pattern here
-  # call handlers for each type of rank:
+  # Gets a rank for a character
+  # @note a chain-of responsibilty pattern here
+  # calls handlers for each type of rank:
   # - world Rank (RaiderIO)
   # - realm Rank (RaiderIO)
   # - app Rank (DB) 
   # that way if we add more types of ranks like guild
   # we can add handlers in the future
-  # @params type    [String] type of rank requested
-  # @params name    [String] name of character
-  # @params realm   [String] name of realm
-  # @params region  [String] name of region, default to 'us'
-  # @returns Rank   [Int] Rank of the Character
+  #
+  # @param  type    [String] type of rank requested
+  # @param  name    [String] name of character
+  # @param  realm   [String] name of realm
+  # @param  region  [String] name of region, default to 'us'
+  # @return [Int] Rank of the Character
   def MythicRank(type, name, realm, region="us")
     char = MythicInit(name, realm)
     out = MythicRank_RaiderIO(char, type)
@@ -123,8 +124,8 @@ class MythicAPI < MythicAPI_UI
   private
   # Formats the error as discord bot would expect it
   #
-  # @params name [String] name of character
-  # @params realm [String] realm of character
+  # @param  name  [String] name of character
+  # @param  realm [String] realm of character
   def DataError(name, realm)
     return "No Data Found For Player #{name}-#{realm}"
   end
@@ -132,10 +133,10 @@ class MythicAPI < MythicAPI_UI
   # Init M+ information
   # set weekly_affix if not set
   #
-  # @params name    [String] name of character
-  # @params realm   [String] name of realm for character
-  # @params region  [String] name of region, default to 'us'
-  # @returns char   [CharObject] a character object from the pool
+  # @param  name    [String] name of character
+  # @param  realm   [String] name of realm for character
+  # @param  region  [String] name of region, default to 'us'
+  # @return [CharObject] a character object from the pool
   def MythicInit(name, realm, region="us")
     # TODO - make this update every week
     if !@weekly_affix 

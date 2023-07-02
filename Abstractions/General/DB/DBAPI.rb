@@ -35,62 +35,46 @@ class DBAPI
     connect()
   end
 
-  # method query_raw
-  # @description
-  #   execute a raw MySQL SELECT statement
-  #   The underlying wrapper provides this functionality to I facilitated it 
+  # Execute a raw MySQL SELECT statement
+  # @note The underlying wrapper provides this functionality to I facilitated it 
   #   see - https://gitlab.com/tmtms/ruby-mysql
-  # @params
-  #   stmt                  string   statement to execute
-  #
-  # @returns
-  #   Result-set Object
-  #
-
-  # execute a raw sql query  (select)
+  # @param query [String] statement to execute
+  # @return [ResultObj]  Result-set Object
   def query_raw(query)
+    # Mostly for logging
     puts "Debug: " + query 
     res = @client.query(query)
     return res.entries
   end
   
-  # method stmt_raw
-  # @description
-  #   execute a raw MySQL statement
-  #   all other functions just form the statements and hand to this function
-  # @params
-  #   stmt                  string   statement to execute
-  #   values                array    the underlying wrapper allows for in-string 
-  #                                  replacement on '?' char along with values 
-  #                                  to replace it with.
-  #                                  this is here to provide that functionality 
-  #                                  (untested)
-  # @returns
-  #   Statement-Result Object
-  #
+  # Execute a raw MySQL statement
+  # @note  all other functions just form the statements and hand to this function
+  # @param stmt [String] statement to execute
+  # @param values [Array] values the underlying gem allows for in-string 
+  #                              replacement on '?' char along with values 
+  #                              to replace it with.
+  #                              this is here to provide that functionality 
+  #                              (untested)
+  # @return [ResultObj]  Statement-Result Object
   def stmt_raw(stmt, values={})
-#    puts "Debug: " + stmt
+    # Mostly for logging
+    puts "Debug: " + stmt
     prep = @client.prepare(stmt)
     out = prep.execute values
     return out 
   end
 
-  # method create_table
-  # @description
-  #   creates a table in the database
-  # @params
-  #   tabl_name             string   name of table to create
-  #   fieldnames            array    name of entries with type separated with %
-  #                                  currently supported - 
-  #                                  int(i)
-  #                                  int AUTO_INCREMENT (ia)
-  #                                  varchar(v)
-  #   extra_opts            string   string with any additional options
-  # @returns
-  #   Statement-Result Object
+  # Creates a table in the database
+  # @note example: create_table("mythic", ["rank%v", "rating%i"], "PRIMARY KEY(rank)")
   #
-  # example usage:
-  # create_table("mythic", ["rank%v", "rating%i"], "PRIMARY KEY(rank)")
+  # @param tabl_name  [String]  name of table to create
+  # @param fieldnames [Array]   name of entries with type separated with %
+  #                              currently supported - 
+  #                                int(i)
+  #                                int AUTO_INCREMENT (ia)
+  #                                varchar(v)
+  # @param extra_opts [String]  string with any additional options
+  # @return [ResultObj]  Statement-Result Object
   def create_table(tabl_name, fieldnames, extra_opts=nil)
     stmt = "CREATE TABLE #{tabl_name} ( "
     type = ""
@@ -125,17 +109,13 @@ class DBAPI
     return stmt_raw(stmt)
   end
 
-  # method insert_table_v
-  # @description
-  #   inserts values into a table 
-  # @params
-  #   tabl_name             string   name of table to create
-  #   vals                  array    array of values to add (expects all fields)
-  # @returns
-  #   Statement-Result Object
+  # Inserts values into a table 
   #
-  # example usage:
-  # insert_table_v("mythic_rank", ["103", username, realm, "666"])
+  # @note example: insert_table_v("mythic_rank", ["103", username, realm, "666"])
+  #
+  # @param tabl_name  [String]  name of table
+  # @param vals       [Array]   name of values to add
+  # @return [ResultObj]  Statement-Result Object
   def insert_table_v(tabl_name, vals)
     stmt = "INSERT INTO #{tabl_name} VALUES ("
     for val in vals
@@ -145,52 +125,41 @@ class DBAPI
     return stmt_raw(stmt)
   end
 
-  # method insert_table_c
-  # @description
-  #   inserts selected values into a table 
-  # @params
-  #   tabl_name             string   name of table to create
-  #   vals                  hash     {"key" => "value"} to add to table
-  # @returns
-  #   Statement-Result Object
+  # Inserts custom values into a table 
   #
-  # example usage:
-  # insert_table_c("mythic_rank", {"rank" => "103", "name" => username, 
-  #                                  "realm" => realm, "rating" => "666"})
+  # @note example: insert_table_c("mythic_rank", <hash>)
+  #
+  # @param tabl_name  [String]  name of table
+  # @param vals       [Hash]    key and value to add to table
+  # @return [ResultObj]  Statement-Result Object
   def insert_table_c(tabl_name, vals)
-   stmt = "INSERT INTO #{tabl_name} ( "
+    stmt = "INSERT INTO #{tabl_name} ( "
 
-   # column names
-   keys = vals.keys
-   for val in keys
+    # column names
+    keys = vals.keys
+    for val in keys
      stmt = stmt + " " + val + ","
-   end
-   stmt = stmt.chop + " )"
+    end
+    stmt = stmt.chop + " )"
 
-   # values
-   stmt = stmt + " VALUES ( "
-   vals.each do |key, val| 
+    # values
+    stmt = stmt + " VALUES ( "
+    vals.each do |key, val| 
     stmt = stmt + " " + val + ","
-   end
-   stmt = stmt.chop
-   stmt = stmt + " )"
-   return stmt_raw(stmt)
+    end
+    stmt = stmt.chop
+    stmt = stmt + " )"
+    return stmt_raw(stmt)
   end
 
-  # method update table by field 
-  # @description
-  #   updates existing entry in a table 
-  # @params
-  #   tabl_name             string   name of table to create
-  #   field_name            hash     name of the column => value to look for
-  #   values                hash     values to update in the filtered row 
-  #                                  {"key" => "value"}
-  # @returns
-  #   Statement-Result Object
+  # Updates existing entry in a table 
   #
-  # example usage:
-  # update_table_by_field("mythic_rank", {"name" => username}, 
-  #                         {"rating" => 154, "rank" => 1000, "realm" => "'Sargeras'"})
+  # @note example: update_table_by_field("mythic_rank", <hash>)
+  #
+  # @param tabl_name  [String]  name of table
+  # @param field_name [Hash]    name of the column => value to look for
+  # @param values     [Hash]    key and value to update
+  # @return [ResultObj]  Statement-Result Object
   def update_table_by_field(tabl_name, field_name, values)
     stmt = "UPDATE #{tabl_name} SET"
     values.each do |key, val|
@@ -206,17 +175,13 @@ class DBAPI
     return stmt_raw(stmt)
   end
 
-  # method delete_field
-  # @description
-  #   delete entry from table which matches field
-  # @params
-  #   tabl_name             string   name of table to create
-  #   field_name            hash     name of the column => value to look for
-  # @returns
-  #   Statement-Result Object
+  # Delete entry from table which matches field
   #
-  # example usage:
-  # delete_field("mythic_rank", {"name" => username})
+  # @note example: delete_field("mythic_rank", <hash>)
+  #
+  # @param tabl_name  [String]  name of table
+  # @param field      [Hash]    name of the column => value to look for
+  # @return [ResultObj]  Statement-Result Object
   def delete_field(tabl_name, field)
     stmt = "DELETE FROM #{tabl_name} WHERE "
     # TODO - add AND/OR etc support
@@ -226,26 +191,25 @@ class DBAPI
     return stmt_raw(stmt)
   end
 
+  # Delete table
+  #
+  # @param tabl_name  [String]  name of table
+  # @return [ResultObj]  Statement-Result Object
   def delete_table(tabl_name)
     stmt = "DROP TABLE #{tabl_name}"
     return stmt_raw(stmt)
   end
 
 
-  # method data_field
-  # @description
-  #   get data for a field value
-  # @params
-  #   tabl_name             string   name of table to create
-  #   fields                hash     name of the column => value to look for
-  #                                  defaults to ALL (*)
-  #   conditions            hash     keys=>values to filter on
-  #   extra_opts            string   string with any additional options
-  # @returns
-  #  result-set from query
+  # Get data for a field value
   #
-  # example usage:
-  # get_field("mythic_rank", ["rating"], {"name" => "'#{username}'"})
+  # @note example: get_field("mythic_rank", ["rating"], <hash>)
+  #
+  # @param tabl_name  [String]  name of table
+  # @param fields     [Hash]    name of the column => value to look for
+  # @param conditions [Hash]    name of the column => value to filter on
+  # @param extra_opts [String]  any additional options
+  # @return [ResultObj]  Statement-Result Object
   def get_field(tabl_name, fields=nil, conditions=nil, extra_opts=nil)
     stmt = "SELECT "
     if !fields
@@ -272,11 +236,8 @@ class DBAPI
   end
 
   private
-  # method connect
-  # @description
-  #  performs connection to the database
-  # @params
-  #  None
+
+  # Performs connection to the database
   def connect
     if !@client
       connect_string = "mysql://" + @user + ":" + @pass + "@" + @hostname + ":" + @port +"/" + @user + "?charset=utf8mb4"

@@ -24,9 +24,6 @@ include RaiderIO_Links
 class RaiderIO_API < RaiderAPI_UI
 
   # Initializes most of the defaults for M+
-  #
-  # @param [nil] None
-  # @return [nil] None
   def initialize
     @region = "us" 
     @locale = "en_US"
@@ -42,7 +39,7 @@ class RaiderIO_API < RaiderAPI_UI
   # @param realm [String] the realm of character
   # @param region [String] the region of realm 
   # @param fields [String] comma seperated fields to request
-  # @return data [JSON, nil] the JSON formatted data from GET request or nil
+  # @return [JSON, nil] the JSON formatted data from GET request or nil
   def getCharacterData(name, realm, region=@region, fields=@mythic_fields)
     # replacement map
     map = { "{name}" => name, "{realm}" => realm, 
@@ -59,8 +56,7 @@ class RaiderIO_API < RaiderAPI_UI
 
   # Gets all the periods including current period
   #
-  # @param nil [nil] None 
-  # @return data [JSON, nil] the JSON formatted data from GET request or nil
+  # @return [JSON, nil] the JSON formatted data from GET request or nil
   def getPeriod
     per_url = @site_url + RAPI[:periods]
     return getData(per_url)
@@ -70,7 +66,7 @@ class RaiderIO_API < RaiderAPI_UI
   #
   # @param region [String] the region of realm 
   # @param locale [String] locale for data. "en_US" is default
-  # @return data [JSON, nil] the JSON formatted data from GET request or nil
+  # @return [JSON, nil] the JSON formatted data from GET request or nil
   def getAffix(region=@region, locale=@locale)
     map = { "{region}" => region, "{locale}" => locale }
     aff_url = @site_url + RAPI[:affixes]
@@ -83,7 +79,7 @@ class RaiderIO_API < RaiderAPI_UI
   # Gets all static data pertaining to current season: slugs, dungeons etc.
   #
   # @param expansion_id [Int] the expansion id, current is set in initialize
-  # @return data [JSON, nil] the JSON formatted data from GET request or nil
+  # @return [JSON, nil] the JSON formatted data from GET request or nil
   def getStatic(expansion_id=@expansion)
     static_url = @site_url + RAPI[:mythic_static]
     static_url = static_url.gsub("{expansionID}", expansion_id.to_s) 

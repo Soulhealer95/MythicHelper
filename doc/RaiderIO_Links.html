@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: RaiderIO_Links
+  
+    &mdash; Documentation by YARD 0.9.34
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "RaiderIO_Links";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (R)</a> &raquo;
+    
+    
+    <span class="title">RaiderIO_Links</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: RaiderIO_Links
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>Abstractions/RaiderIO/raiderio_api_index.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Use string.gsub to replace {} variables</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="RAPI-constant" class="">RAPI =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Index of all links for raiderIO</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='comment'># Primary Link
+</span>  <span class='symbol'>:api_url</span>              <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>https://raider.io</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='comment'># Character Link
+</span>  <span class='symbol'>:char_info</span>            <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/api/v1/characters/profile?region={region}&amp;realm={realm}&amp;name={name}&amp;fields={fields}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='comment'># General M+
+</span>  <span class='symbol'>:periods</span>              <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/api/v1/periods</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='symbol'>:mythic_static</span>        <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/api/v1/mythic-plus/static-data?expansion_id={expansionID}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='symbol'>:affixes</span>              <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/api/v1/mythic-plus/affixes?region={region}&amp;locale={locale}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='comment'># Specific M+
+</span>  <span class='symbol'>:run_details</span>          <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/api/v1/mythic-plus/run-details?season={seasonSlug}&amp;id={runID}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='symbol'>:season_runs</span>          <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/api/v1/mythic-plus/runs?season={season}&amp;region={region}&amp;dungeon={dungeons}&amp;page={page}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+<span class='rbrace'>}</span></pre></dd>
+      
+        <dt id="RFLDS-constant" class="">RFLDS =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Allowed Fields for Character</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='symbol'>:all</span>                  <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mythic_plus_scores_by_season:current,mythic_plus_ranks,mythic_plus_best_runs,mythic_plus_alternate_runs</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='symbol'>:scores</span>               <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mythic_plus_scores_by_season:{season}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='symbol'>:ranks</span>                <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mythic_plus_ranks</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='symbol'>:best_runs</span>            <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mythic_plus_best_runs</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='symbol'>:alt_runs</span>             <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mythic_plus_alternate_runs</span><span class='tstring_end'>&quot;</span></span>
+<span class='rbrace'>}</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+
+
+</div>
+
+      <div id="footer">
+  Generated on Sun Jul  2 10:22:52 2023 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.34 (ruby-2.7.0).
+</div>
+
+    </div>
+  </body>
+</html>

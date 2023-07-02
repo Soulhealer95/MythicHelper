@@ -12,10 +12,9 @@
 #  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-# Use strategy pattern to find the proper config depending on resource selected
 require 'json'
 
+# Use strategy pattern to find the proper config depending on resource selected
 class GetConfig
 
   def initialize(caller_obj)
@@ -31,6 +30,8 @@ class GetConfig
 
   end
 
+  # get configuration using caller's class name
+  # @return [Config] config for a particular type
   def getconf
     conf = nil
     if @type.include?("DB")
@@ -46,26 +47,29 @@ class GetConfig
   end
 
   private
+  # reads a config file to get the data
   def getfileData
     data = nil
     return data if @file == ""
 
-    puts File.expand_path(@file)
     @fileobj = File.open(@file, "r")
     data = @fileobj.read()
     return JSON.parse(data)
   end
 
+  # Get DB config
   def getDBConf
     @file = @conf_db
     return getfileData
   end
 
+  # Get Discord Config
   def getDiscConf
     @file = @conf_disc
     return getfileData
   end
 
+  # Get Blizzard OAuth Config
   def getBlizzConf
     @file = @conf_oauth
     return getfileData

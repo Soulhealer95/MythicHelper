@@ -4,11 +4,14 @@
 - Uses RaiderIO and a cloud MySQL DB
 - Includes a RaiderIO and Blizzard ruby wrapper
 
-# Pre-Requisites
+# PreRequisites
 ## Gems
 - ruby-mysql
-- json
 - discordrb
+- json
+- uri
+- net/http
+- httpparty
 
 ## config
 - database config as 'config/.db.conf'
@@ -19,6 +22,8 @@ see config for templates
 
 # Usage
 `ruby app.rb`
+
+# Info
 - Tested on Linux
 - You will need to setup your application
 - Requires a server to host this

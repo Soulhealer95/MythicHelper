@@ -33,6 +33,7 @@ module MythicInfo
   }
 end
 
+# Mythic Character Object
 class MythicChar
   include MythicInfo
 
@@ -58,39 +59,50 @@ class MythicChar
   end
 
   # getters
-   # return time of object creation
+
+  # Get the time of object creation
   def getCreated
     return @created
   end
 
-  # return rank of type requested
-  # currently 3 supported are World, Realm, App
+  # Get the rank of type requested
+  # @note currently 3 supported are World, Realm, App
   #
-  # @params type [String] type of rank to get
-  # @return rank [Int,nil] rank if found or nil
+  # @param type [String] type of rank to get
+  # @return [Int,nil] rank if found or nil
   def getRank(type)
     return @ranks[type] if @rank_types.include? type
     return nil
   end
 
-  # return rating instance variable
+  # Get the rating instance variable
+  #
+  # @return [Int,nil] rating of player if found or nil
   def getRating
     return @rating
   end
 
+  # Tracks if Runs have been set 
+  #
+  # @return [Bool, nil] value of instance variable runs_set
   def getRunStatus
     return @runs_set
   end
 
+
+  # Tracks if Ranks have been set 
+  # @note - Not currently used just check the ranks directly instead
+  #
+  # @return [Bool, nil] value of instance variable ranks_set
   def getRankStatus
     return @ranks_set
   end
 
   # return the value of runs object
   #
-  # @params dung_name [String, nil] Name of Dungeon to get
-  # @params aff_name [String, nil] Name of Affix to get
-  # @retuns runs [Hash] hash of runs for dungeon which match criteria, all if no param is provided
+  # @param dung_name [String, nil] Name of Dungeon to get
+  # @param aff_name [String, nil] Name of Affix to get
+  # @return [Hash] hash of runs for dungeon which match criteria, all if no param is provided
   def getRuns(dung_name=nil, aff_name=nil)
     if dung_name || aff_name
       out = nil
@@ -113,13 +125,16 @@ class MythicChar
 
   # update the value of ranks
   #
-  # @params type [String] Supported types are - World, Realm, App
-  # @retuns nil [nil] None
+  # @param type [String] Supported types are - World, Realm, App
+  # @return [nil] None
   def setRank(type, value)
     @ranks[type] = value
   end
 
-  # update dungeon_list: {dungeon_name => {affix => [ level, rating ]}}
+  # Update the runs object
+  # 
+  # @param hash [Hash] hash of format "dungeon_name => (affix => [ level, rating ])"
+  # @return [nil] None
   def setRuns(hash)
     hash.each do | key, val |
       val.each do | aff, data |
@@ -128,13 +143,17 @@ class MythicChar
     end
   end
 
+  # update the value of rating
+  #
+  # @param rating [Int] a rating value to set
+  # @return [nil] None
   def setRating(rating)
     @rating = rating
-    return
   end
 
-  # after all runs have been provided
-  # calculate the runs
+  # Calculates rating from scores
+  # @note higher_affix * 1.5 + lower_affix * 0.5 = rating
+  # @note expected to be called manually after runs are set
   def CalculateRuns
     aff = @curr_affixes
     prim = aff[0]
@@ -159,8 +178,12 @@ class MythicChar
   end
 
   private
-  # template for dungeon_list: {dungeon_name => [ level, rating ]}
-  def emptyRuns()
+
+  # Initialize runs object
+  # @note template for dungeon_list: {dungeon_name => [ level, rating ]}
+  #
+  # @return [RunObj] a zeroed out Runs Object
+  def emptyRuns
     runs = {}
     for dungeon_name in @curr_dungeons
       for aff in @curr_affixes
@@ -174,7 +197,10 @@ class MythicChar
     return runs
   end
 
-  # template for ranks: { rank_type => value }
+  # Initialize ranks object
+  # @note template for ranks: '{ rank_type => value }'
+  #
+  # @return [Hash] Hash of template
   def emptyRanks
     ranks = {}
     for type in @rank_types
@@ -200,6 +226,12 @@ class CharCache
     @max_life = 900 # seconds = 15 minutes
   end
 
+  # Create or fetch a character from the pool
+  #
+  # @param name [String] name of character
+  # @param realm [String] name of realm
+  # @param region [String] region of character
+  # @return [CharObject] MythicChar object with template
   def getChar(name, realm, region="us")
     # check if this object is in pool
     obj = fetchObj(name, realm)
@@ -210,8 +242,9 @@ class CharCache
   end
 
   private
-  # add object to the pool
-  # object keys in pool are created using name-realm string
+  # Add object to the pool
+  # @note object keys in pool are created using name-realm string
+  # (see #getChar)
   def addObj(name, realm, region)
     pool_obj_name = name + "-" + realm
     obj = MythicChar.new(name, realm, region)
@@ -222,9 +255,10 @@ class CharCache
 
   # returns an object currently in the pool
   #
-  # @params name [String] name of character
-  # @params realm [String] name of realm
-  # @returns obj [CharObject, nil] Character object or nil
+  # @param  name   [String] name of character
+  # @param  realm  [String] name of realm
+  # @return [CharObject, nil] Character object or nil
+  # (see #getChar)
   def fetchObj(name, realm)
     pool_obj_name = name + "-" + realm
 
@@ -237,13 +271,13 @@ class CharCache
   end
 
   # Make space in the pool
+  # @note the current criteria is based on capacity and duration
   def makeSpace
     if @pool.length < @limit
       return
     end
 
     # delete the first one.
-    # could make this smarter
     key = @pool.keys
     @pool.delete(key[0])
     return

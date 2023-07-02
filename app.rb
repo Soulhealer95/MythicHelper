@@ -72,8 +72,8 @@ class MythicBot
   private
   # Parse data and get next best dungeon
   #
-  # @parse data [MythicRuns] Runs data from Mythic Character Object
-  # @return out [String] Dungeon - Level 
+  # @param data [MythicRuns] Runs data from Mythic Character Object
+  # @return [String] Dungeon and Level 
   def NextBest(data)
     min = [ 999, ""]
     affix = @mythic_api.instance_variable_get(:@weekly_affix)
@@ -101,8 +101,8 @@ class MythicBot
 
   # Print Runs data 
   #
-  # @parse data [MythicRuns] Runs data from Mythic Character Object
-  # @return out [String] Dungeon and affix data printed
+  # @param data [MythicRuns] Runs data from Mythic Character Object
+  # @return [String] Dungeon and affix data printed
   def PrettyPrintRuns(data)
     return "No Data Found!" if !data || data == []
     str = ""
