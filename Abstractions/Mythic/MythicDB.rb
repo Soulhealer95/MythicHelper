@@ -13,8 +13,8 @@
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-require_relative 'DBAPI'
-require_relative 'parser'
+require_relative '../General/DB/DBAPI'
+require_relative '../General/config_parser'
 
 # Extend DBAPI to get useful M+ information
 class MythicDB < DBAPI

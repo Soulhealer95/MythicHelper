@@ -14,7 +14,7 @@
 
 
 # Interface for M+ RaiderIO API
-require_relative 'Request'
+require_relative '../General/Request'
 
 # Provides Interface for Mythic+ RaiderIO API
 class RaiderAPI_UI < Request
