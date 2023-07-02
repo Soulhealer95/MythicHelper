@@ -43,24 +43,19 @@ class MythicDB < DBAPI
                "rating" => nil
               }
   end
-
-  def format_s(str)
-    return "'#{str}'"
-  end
-  
+ 
   # look up a name in the table created
   def lookup_name(name, realm)
     out =  get_field(@leaderboard, nil, {"name" => "'#{name}'", 
                                          "realm" => "'#{realm}'"} )
+    return nil if out.empty?
     return JSON.generate(out)
   end
 
   # get rating of a player from db
   def get_rating(name, realm)
     out = lookup_name(name, realm)
-    rating = nil
-    rating = out if !out.empty?
-    return rating
+    return out
   end
 
   # add rating to player in db
@@ -68,7 +63,7 @@ class MythicDB < DBAPI
     namef = format_s(name)
     realmf = format_s(realm)
     # check if the name exists - formats the names
-    if get_rating(name, realm) 
+    if !get_rating(name, realm) 
       insert_table_c(@leaderboard, {"name" => namef, "realm" => realmf, "rating" => rating.to_s})
     else
       update_table_by_field(@leaderboard, {"name" => namef}, {"rating" => rating})
@@ -92,6 +87,9 @@ class MythicDB < DBAPI
     create_table(@leaderboard, ["#{keys[0]}%v", "#{keys[1]}%v",
                                 "#{keys[2]}%i"])
   end
-
+  def format_s(str)
+    return "'#{str}'"
+  end
+ 
 end
 

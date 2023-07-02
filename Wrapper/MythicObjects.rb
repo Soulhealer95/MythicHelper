@@ -13,7 +13,7 @@ module MythicInfo
                           "Neltharus",
                           "The Underrot",
                           "Freehold",
-                          "Neltharian's Lair",
+                          "Neltharion's Lair",
                           "The Vortex Pinnacle",
                           "Uldaman: Legacy of Tyr"
                         ],
@@ -30,13 +30,15 @@ class MythicChar
     @region = region
 
     # static data
-    @rank_types = [ "World" , "Realm", "App" ]
+    @rank_types = [ "world" , "realm", "app" ]
     @curr_dungeons = SeasonInfo[:season_dungeons]
     @curr_affixes = SeasonInfo[:primary_affixes]
 
     # template instantiate
     @runs = emptyRuns()
     @ranks = emptyRanks()
+    @runs_set = nil
+    @ranks_set = nil
     @rating = nil
 
     # Track when instance was created
@@ -64,6 +66,13 @@ class MythicChar
     return @rating
   end
 
+  def getRunStatus
+    return @runs_set
+  end
+
+  def getRankStatus
+    return @ranks_set
+  end
 
   # return the value of runs object
   #
@@ -98,7 +107,7 @@ class MythicChar
     @ranks[type] = value
   end
 
-  # update dungeon_list: {dungeon_name => {affix = > [ level, rating ]}}
+  # update dungeon_list: {dungeon_name => {affix => [ level, rating ]}}
   def setRuns(hash)
     hash.each do | key, val |
       val.each do | aff, data |
@@ -112,6 +121,31 @@ class MythicChar
     return
   end
 
+  # after all runs have been provided
+  # calculate the runs
+  def CalculateRuns
+    aff = @curr_affixes
+    prim = aff[0]
+    sec = aff[1]
+    score_index = 1
+    higher_factor = 1.5
+    lower_factor = 0.5
+    
+    @runs.each do | key, val|
+      pval = val[prim][score_index]  
+      sval = val[sec][score_index]
+      x = (pval - sval)
+      if ( x >= 0 )
+        @runs[key][prim][score_index] = pval * higher_factor
+        @runs[key][sec][score_index] = sval * lower_factor
+      else
+        @runs[key][prim][score_index] = pval * lower_factor
+        @runs[key][sec][score_index] = sval * higher_factor
+      end
+    end
+    @runs_set = true
+  end
+
   private
   # template for dungeon_list: {dungeon_name => [ level, rating ]}
   def emptyRuns()
@@ -119,7 +153,7 @@ class MythicChar
     for dungeon_name in @curr_dungeons
       for aff in @curr_affixes
         if runs[dungeon_name]
-          runs[dungeon_name] = runs[dungeon_name].merge( { aff => [0,0] })
+          runs[dungeon_name] = runs[dungeon_name].merge({ aff => [0,0] })
         else
           runs[dungeon_name] = {aff => [0,0]}
         end

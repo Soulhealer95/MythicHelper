@@ -12,9 +12,7 @@
 #  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-require_relative "RaiderAPI"
-require_relative "MythicDB"
-require_relative "parser"
+require_relative 'MythicAPI'
 require 'discordrb'
 
 
@@ -24,59 +22,50 @@ class MythicBot
     config = confobj.getconf
     @token = config["token"]
     @bot = Discordrb::Commands::CommandBot.new token: @token, prefix: '!'
-    @db = MythicDB.new
+
+    #init mythic commands
+    @mythic_api = MythicAPI.new
     setupCommands()
+
+    # run bots
     @bot.run
   end
   def setupCommands
     # M+ Rating
     @bot.command(:rating,  min_args: 2, max_args: 2, description: 'Get your Mythic+ Rating.', usage: 'rating [charactername] [realm]') do |_event, username, realm|
-      rating = UpdateRating(username, realm)
-      return "No Rating Found" if !rating
+      rating = @mythic_api.MythicRating(username, realm)
       return rating
     end
 
     # Best Runs
     @bot.command(:runs,  min_args: 2, max_args: 2, description: 'Get your M+ Runs', usage: 'runs [charactername] [realm]') do |_event, username, realm|
-      raid = RaiderAPI.new(username, realm)
-      return PrettyPrintRuns(raid.MythicRuns)
+      runs = @mythic_api.MythicRuns(username, realm)
+      return PrettyPrintRuns(runs)
     end
 
     # Next Best
     @bot.command(:nextbest,  min_args: 2, max_args: 2, description: 'Best Dungeon to Run Next', usage: 'nextbest [charactername] [realm]') do |_event, username, realm|
-      raid = RaiderAPI.new(username, realm)
-      return NextBest(raid)
+      runs = @mythic_api.MythicRuns(username, realm)
+      return NextBest(runs)
     end
 
-    # App Rating
-    @bot.command(:apprank,  min_args: 2, max_args: 2, description: 'Server Ranking among Bot Users', usage: 'apprank [charactername] [realm]') do |_event, username, realm|
-      if UpdateRating(username, realm)
-        rank = @db.get_app_rank(username, realm)
-      else
-        rank = "No Rating Found"
-      end
-      return rank
+    # App Rank
+    @bot.command(:apprank,  min_args: 2, max_args: 2, description: 'Ranking among Bot Users', usage: 'apprank [charactername] [realm]') do |_event, username, realm|
+      return @mythic_api.MythicRank("app", username, realm)
     end
 
+    # World Rank
+    @bot.command(:rank,  min_args: 2, max_args: 2, description: 'World Ranking', usage: 'rank [charactername] [realm]') do |_event, username, realm|
+      return @mythic_api.MythicRank("world", username, realm)
+    end
 
   end
 
   private
-  def UpdateRating(username, realm)
-      raid = RaiderAPI.new(username,realm)
-      rating = raid.MythicRating
-      if rating
-        @db.add_rating(username, realm, rating)
-        return rating
-      end
-      return nil
-  end
-  def NextBest(raid)
-    min = [999, ""]
-
-    affix = (raid.MythicCurrAffixes)[0].to_s
-    data = raid.MythicRuns
-
+  # Mostly formatting dungeons
+  def NextBest(data)
+    min = [ 999, ""]
+    affix = @mythic_api.instance_variable_get(:@weekly_affix)
     data.each do |key, val|
       if val[affix][0] == 0
         min[0] = "Any level"
@@ -88,13 +77,13 @@ class MythicBot
         min[0] = val[affix][0]
         min[1] = key
       end
-
     end
+    
     out = min[1] + " - "
     if min[0] == "Any level"
       out = out + min[0] 
     else
-      out = out + (data[min[1]][affix][1] + 1).to_s
+      out = out + (data[min[1]][affix][0] + 1).to_s
     end
     return out
   end
