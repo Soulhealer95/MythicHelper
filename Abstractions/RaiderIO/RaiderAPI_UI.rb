@@ -14,12 +14,11 @@
 
 
 # Interface for M+ RaiderIO API
-require_relative '../General/Request'
 
 # Provides Interface for Mythic+ RaiderIO API
-class RaiderAPI_UI < Request
+class RaiderAPI_UI 
   def initialize
-    super # Request
+    #stub
   end
 
   # Character API

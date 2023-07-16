@@ -17,13 +17,15 @@ require 'oauth2'
 require_relative "BlizzardAPI_UI"
 require_relative '../General/config_parser'
 require_relative 'blizzard_api_index'
+require_relative '../General/Request'
+
 include Blizzard_Links
 
 
 # Implementation of BlizzardAPI
 class BlizzardAPI < BlizzardAPI_UI
   def initialize
-    super
+    @request = Request.new()
 
     # Oauth Config
     configobj = GetConfig.new(self)
@@ -176,17 +178,16 @@ class BlizzardAPI < BlizzardAPI_UI
     use_params = default_params.merge(params)
     init_token
     url = BAPI[:api_url] + data_url
-    out = get_with_token(url,@token.token,use_params,headers)
+    out = @request.get_with_token(url,@token.token,use_params,headers)
     return nil if out["code"]
     return out
   end
 
   def oauth_follow(url)
     init_token
-    out = get_with_token(url,@token.token)
+    out = @request.get_with_token(url,@token.token)
     return nil if out["code"]
     return out
   end
-
 
 end
