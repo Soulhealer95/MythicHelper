@@ -110,11 +110,7 @@
 <div class="tags">
   
 
-</div><div id="subclasses">
-  <h2>Direct Known Subclasses</h2>
-  <p class="children"><span class='object_link'><a href="RaiderAPI_UI.html" title="RaiderAPI_UI (class)">RaiderAPI_UI</a></span></p>
 </div>
-
 
 
 
@@ -132,14 +128,12 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>  &#x21d2; Request </a>
+      <a href="#get_data-instance_method" title="#get_data (instance method)">#<strong>get_data</strong>(url)  &#x21d2; Object </a>
     
 
     
   </span>
   
-  
-    <span class="note title constructor">constructor</span>
   
   
   
@@ -149,7 +143,55 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>A new instance of Request.</p>
+<p>Given a URL, make a GET call to retrieve the data returns JSON object.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_with_token-instance_method" title="#get_with_token (instance method)">#<strong>get_with_token</strong>(url, token, params = {}, header = {})  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Makes OAuth calls.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#post_data-instance_method" title="#post_data (instance method)">#<strong>post_data</strong>(url, params)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Given a URL and list of &#39;x&#39; =&gt; &#39;y&#39; fields, make a POST call to retrieve the data returns JSON object.</p>
 </div></span>
   
 </li>
@@ -158,13 +200,16 @@
     </ul>
   
 
-<div id="constructor_details" class="method_details_list">
-  <h2>Constructor Details</h2>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="get_data-instance_method">
   
-    <div class="method_details first">
-  <h3 class="signature first" id="initialize-instance_method">
-  
-    #<strong>initialize</strong>  &#x21d2; <tt><span class='object_link'><a href="" title="Request (class)">Request</a></span></tt> 
+    #<strong>get_data</strong>(url)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -173,7 +218,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns a new instance of Request.</p>
+<p>Given a URL, make a GET call to retrieve the data returns JSON object</p>
 
 
   </div>
@@ -187,26 +232,141 @@
       <pre class="lines">
 
 
-27
-28</pre>
+30
+31
+32
+33
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'Abstractions/General/Request.rb', line 27</span>
+      <pre class="code"><span class="info file"># File 'Abstractions/General/Request.rb', line 30</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_get_data'>get_data</span><span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_uri'>uri</span> <span class='op'>=</span> <span class='const'>URI</span><span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_res'>res</span> <span class='op'>=</span> <span class='const'>Net</span><span class='op'>::</span><span class='const'>HTTP</span><span class='period'>.</span><span class='id identifier rubyid_get_response'>get_response</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_parse_data'>parse_data</span><span class='lparen'>(</span><span class='id identifier rubyid_res'>res</span><span class='rparen'>)</span>
+
 <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
 </div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_with_token-instance_method">
   
-</div>
+    #<strong>get_with_token</strong>(url, token, params = {}, header = {})  &#x21d2; <tt>Object</tt> 
+  
 
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Makes OAuth calls</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'Abstractions/General/Request.rb', line 45</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_with_token'>get_with_token</span><span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='comma'>,</span> <span class='id identifier rubyid_token'>token</span><span class='comma'>,</span> <span class='id identifier rubyid_params'>params</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='id identifier rubyid_header'>header</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_def_header'>def_header</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Authorization</span><span class='tstring_end'>&#39;</span></span><span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Bearer </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_token'>token</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_def_query'>def_query</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_headers'>headers</span> <span class='op'>=</span> <span class='id identifier rubyid_def_header'>def_header</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_header'>header</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_query'>query</span> <span class='op'>=</span> <span class='id identifier rubyid_def_query'>def_query</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
+
+  <span class='kw'>if</span> <span class='gvar'>$debug</span>
+    <span class='id identifier rubyid_resp'>resp</span> <span class='op'>=</span> <span class='const'>HTTParty</span><span class='period'>.</span><span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='comma'>,</span> <span class='label'>query:</span> <span class='id identifier rubyid_query'>query</span><span class='comma'>,</span> <span class='label'>headers:</span> <span class='id identifier rubyid_headers'>headers</span><span class='comma'>,</span> <span class='label'>debug_output:</span> <span class='gvar'>$stdout</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_resp'>resp</span> <span class='op'>=</span> <span class='const'>HTTParty</span><span class='period'>.</span><span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='comma'>,</span> <span class='label'>query:</span> <span class='id identifier rubyid_query'>query</span><span class='comma'>,</span> <span class='label'>headers:</span> <span class='id identifier rubyid_headers'>headers</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_resp'>resp</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="post_data-instance_method">
+  
+    #<strong>post_data</strong>(url, params)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Given a URL and list of &#39;x&#39; =&gt; &#39;y&#39; fields, make a POST call to retrieve the data returns JSON object</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+38
+39
+40
+41
+42</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'Abstractions/General/Request.rb', line 38</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_post_data'>post_data</span><span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='comma'>,</span> <span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_uri'>uri</span> <span class='op'>=</span> <span class='const'>URI</span><span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_res'>res</span> <span class='op'>=</span> <span class='const'>Net</span><span class='op'>::</span><span class='const'>HTTP</span><span class='period'>.</span><span class='id identifier rubyid_post_form'>post_form</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='comma'>,</span> <span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_parse_data'>parse_data</span><span class='lparen'>(</span><span class='id identifier rubyid_res'>res</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
 
 </div>
 
       <div id="footer">
-  Generated on Sun Jul  2 10:22:52 2023 by
+  Generated on Sun Jul 16 11:32:32 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-2.7.0).
 </div>
