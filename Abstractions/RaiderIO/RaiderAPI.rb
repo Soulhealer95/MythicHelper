@@ -14,6 +14,7 @@
 
 
 require_relative 'RaiderAPI_UI'
+require_relative '../General/Request'
 
 # Indexed API URLs and Params
 require_relative 'raiderio_api_index'
@@ -30,7 +31,7 @@ class RaiderIO_API < RaiderAPI_UI
     @expansion = 9 # This would have to be updated
     @mythic_fields = RFLDS[:all]
     @site_url = RAPI[:api_url]
-    super
+    @request = Request.new()
   end
 
   # Gets all data pertaining to a character 
@@ -51,7 +52,7 @@ class RaiderIO_API < RaiderAPI_UI
     end
 
     # Get Data
-    return getData(char_url)
+    return @request.get_data(char_url)
   end
 
   # Gets all the periods including current period
@@ -59,7 +60,7 @@ class RaiderIO_API < RaiderAPI_UI
   # @return [JSON, nil] the JSON formatted data from GET request or nil
   def getPeriod
     per_url = @site_url + RAPI[:periods]
-    return getData(per_url)
+    return @request.get_data(per_url)
   end
 
   # Gets all data pertaining to affixes in current season
@@ -73,7 +74,7 @@ class RaiderIO_API < RaiderAPI_UI
     map.each do | key, val |
       aff_url = aff_url.gsub(key, val)
     end
-    return getData(aff_url)
+    return @request.get_data(aff_url)
   end
 
   # Gets all static data pertaining to current season: slugs, dungeons etc.
@@ -83,7 +84,7 @@ class RaiderIO_API < RaiderAPI_UI
   def getStatic(expansion_id=@expansion)
     static_url = @site_url + RAPI[:mythic_static]
     static_url = static_url.gsub("{expansionID}", expansion_id.to_s) 
-    return getData(static_url)
+    return @request.get_data(static_url)
   end
 
 end

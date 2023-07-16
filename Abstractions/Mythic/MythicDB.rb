@@ -67,16 +67,14 @@ class MythicDB < DBAPI
     return (out.find_index([name]) + 1)
   end
 
-
   # creates a table in database.
-  # should only be run once, during initial config
-  # never let it be called from the outside
-  private
+  # should only be run once ever
   def init_board
     keys = @fields.keys
     create_table(@leaderboard, ["#{keys[0]}%v", "#{keys[1]}%v",
                                 "#{keys[2]}%i"])
   end
+  private
   # format strings into something db would accept
   def format_s(str)
     return "'#{str}'"

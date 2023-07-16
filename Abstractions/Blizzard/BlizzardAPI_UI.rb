@@ -12,13 +12,8 @@
 #  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-require_relative '../General/Request'
-
-class BlizzardAPI_UI < Request
+class BlizzardAPI_UI 
   def initialize
-    # get request functions
-    super
   end
 
   #public methods

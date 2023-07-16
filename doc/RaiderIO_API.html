@@ -74,8 +74,6 @@
         <ul class="fullTree">
           <li>Object</li>
           
-            <li class="next"><span class='object_link'><a href="Request.html" title="Request (class)">Request</a></span></li>
-          
             <li class="next"><span class='object_link'><a href="RaiderAPI_UI.html" title="RaiderAPI_UI (class)">RaiderAPI_UI</a></span></li>
           
             <li class="next">RaiderIO_API</li>
@@ -265,13 +263,7 @@
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="RaiderAPI_UI.html" title="RaiderAPI_UI (class)">RaiderAPI_UI</a></span></h3>
   <p class="inherited"><span class='object_link'><a href="RaiderAPI_UI.html#getCharacter-instance_method" title="RaiderAPI_UI#getCharacter (method)">#getCharacter</a></span></p>
-
-  
-  
-  
-  
-  
-  <div id="constructor_details" class="method_details_list">
+<div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
     <div class="method_details first">
@@ -300,17 +292,17 @@
       <pre class="lines">
 
 
-27
 28
 29
 30
 31
 32
 33
-34</pre>
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'Abstractions/RaiderIO/RaiderAPI.rb', line 27</span>
+      <pre class="code"><span class="info file"># File 'Abstractions/RaiderIO/RaiderAPI.rb', line 28</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
   <span class='ivar'>@region</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>us</span><span class='tstring_end'>&quot;</span></span> 
@@ -318,7 +310,7 @@
   <span class='ivar'>@expansion</span> <span class='op'>=</span> <span class='int'>9</span> <span class='comment'># This would have to be updated
 </span>  <span class='ivar'>@mythic_fields</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="RaiderIO_Links.html#RFLDS-constant" title="RaiderIO_Links::RFLDS (constant)">RFLDS</a></span></span><span class='lbracket'>[</span><span class='symbol'>:all</span><span class='rbracket'>]</span>
   <span class='ivar'>@site_url</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="RaiderIO_Links.html#RAPI-constant" title="RaiderIO_Links::RAPI (constant)">RAPI</a></span></span><span class='lbracket'>[</span><span class='symbol'>:api_url</span><span class='rbracket'>]</span>
-  <span class='kw'>super</span>
+  <span class='ivar'>@request</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Request.html" title="Request (class)">Request</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -416,17 +408,17 @@
       <pre class="lines">
 
 
-70
 71
 72
 73
 74
 75
 76
-77</pre>
+77
+78</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'Abstractions/RaiderIO/RaiderAPI.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'Abstractions/RaiderIO/RaiderAPI.rb', line 71</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_getAffix'>getAffix</span><span class='lparen'>(</span><span class='id identifier rubyid_region'>region</span><span class='op'>=</span><span class='ivar'>@region</span><span class='comma'>,</span> <span class='id identifier rubyid_locale'>locale</span><span class='op'>=</span><span class='ivar'>@locale</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_map'>map</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>{region}</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_region'>region</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>{locale}</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_locale'>locale</span> <span class='rbrace'>}</span>
@@ -434,7 +426,7 @@
   <span class='id identifier rubyid_map'>map</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_val'>val</span> <span class='op'>|</span>
     <span class='id identifier rubyid_aff_url'>aff_url</span> <span class='op'>=</span> <span class='id identifier rubyid_aff_url'>aff_url</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_val'>val</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
-  <span class='kw'>return</span> <span class='id identifier rubyid_getData'>getData</span><span class='lparen'>(</span><span class='id identifier rubyid_aff_url'>aff_url</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='ivar'>@request</span><span class='period'>.</span><span class='id identifier rubyid_get_data'>get_data</span><span class='lparen'>(</span><span class='id identifier rubyid_aff_url'>aff_url</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -557,7 +549,6 @@
       <pre class="lines">
 
 
-43
 44
 45
 46
@@ -569,10 +560,11 @@
 52
 53
 54
-55</pre>
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'Abstractions/RaiderIO/RaiderAPI.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'Abstractions/RaiderIO/RaiderAPI.rb', line 44</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_getCharacterData'>getCharacterData</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_realm'>realm</span><span class='comma'>,</span> <span class='id identifier rubyid_region'>region</span><span class='op'>=</span><span class='ivar'>@region</span><span class='comma'>,</span> <span class='id identifier rubyid_fields'>fields</span><span class='op'>=</span><span class='ivar'>@mythic_fields</span><span class='rparen'>)</span>
   <span class='comment'># replacement map
@@ -585,7 +577,7 @@
   <span class='kw'>end</span>
 
   <span class='comment'># Get Data
-</span>  <span class='kw'>return</span> <span class='id identifier rubyid_getData'>getData</span><span class='lparen'>(</span><span class='id identifier rubyid_char_url'>char_url</span><span class='rparen'>)</span>
+</span>  <span class='kw'>return</span> <span class='ivar'>@request</span><span class='period'>.</span><span class='id identifier rubyid_get_data'>get_data</span><span class='lparen'>(</span><span class='id identifier rubyid_char_url'>char_url</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -636,17 +628,17 @@
       <pre class="lines">
 
 
-60
 61
 62
-63</pre>
+63
+64</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'Abstractions/RaiderIO/RaiderAPI.rb', line 60</span>
+      <pre class="code"><span class="info file"># File 'Abstractions/RaiderIO/RaiderAPI.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_getPeriod'>getPeriod</span>
   <span class='id identifier rubyid_per_url'>per_url</span> <span class='op'>=</span> <span class='ivar'>@site_url</span> <span class='op'>+</span> <span class='const'><span class='object_link'><a href="RaiderIO_Links.html#RAPI-constant" title="RaiderIO_Links::RAPI (constant)">RAPI</a></span></span><span class='lbracket'>[</span><span class='symbol'>:periods</span><span class='rbracket'>]</span>
-  <span class='kw'>return</span> <span class='id identifier rubyid_getData'>getData</span><span class='lparen'>(</span><span class='id identifier rubyid_per_url'>per_url</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='ivar'>@request</span><span class='period'>.</span><span class='id identifier rubyid_get_data'>get_data</span><span class='lparen'>(</span><span class='id identifier rubyid_per_url'>per_url</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -719,19 +711,19 @@
       <pre class="lines">
 
 
-83
 84
 85
 86
-87</pre>
+87
+88</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'Abstractions/RaiderIO/RaiderAPI.rb', line 83</span>
+      <pre class="code"><span class="info file"># File 'Abstractions/RaiderIO/RaiderAPI.rb', line 84</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_getStatic'>getStatic</span><span class='lparen'>(</span><span class='id identifier rubyid_expansion_id'>expansion_id</span><span class='op'>=</span><span class='ivar'>@expansion</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_static_url'>static_url</span> <span class='op'>=</span> <span class='ivar'>@site_url</span> <span class='op'>+</span> <span class='const'><span class='object_link'><a href="RaiderIO_Links.html#RAPI-constant" title="RaiderIO_Links::RAPI (constant)">RAPI</a></span></span><span class='lbracket'>[</span><span class='symbol'>:mythic_static</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_static_url'>static_url</span> <span class='op'>=</span> <span class='id identifier rubyid_static_url'>static_url</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>{expansionID}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_expansion_id'>expansion_id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> 
-  <span class='kw'>return</span> <span class='id identifier rubyid_getData'>getData</span><span class='lparen'>(</span><span class='id identifier rubyid_static_url'>static_url</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='ivar'>@request</span><span class='period'>.</span><span class='id identifier rubyid_get_data'>get_data</span><span class='lparen'>(</span><span class='id identifier rubyid_static_url'>static_url</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -743,7 +735,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sun Jul  2 10:22:52 2023 by
+  Generated on Sun Jul 16 11:32:32 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-2.7.0).
 </div>

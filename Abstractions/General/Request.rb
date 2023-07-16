@@ -24,36 +24,24 @@ $debug = nil
 # TO simplify everything, I created a request class to perform all API calls
 # these can be extended to work with various APIs
 class Request
-  def initialize
-  end
 
   # Given a URL, make a GET call to retrieve the data
   # returns JSON object
-  private
-  def getData(url)
+  def get_data(url)
     uri = URI(url)
     res = Net::HTTP.get_response(uri)
-    return ParseData(res)
+    return parse_data(res)
 
   end
   # Given a URL and list of 'x' => 'y' fields, make a POST call to retrieve the data
   # returns JSON object
-  def postData(url, params)
+  def post_data(url, params)
     uri = URI(url)
     res = Net::HTTP.post_form(uri, params)
-    return ParseData(res)
+    return parse_data(res)
   end
 
-  def ParseData(response)
-    if response.is_a?(Net::HTTPSuccess)
-      out = JSON.parse(response.body)
-      return out
-    end
-    # This should be error
-    puts response.body if $debug
-    return nil
-  end
-
+  # Makes OAuth calls 
   def get_with_token(url, token, params={}, header={})
     def_header = {'Authorization'=> "Bearer #{token}"}
     def_query = {}
@@ -67,6 +55,17 @@ class Request
       resp = HTTParty.get(url, query: query, headers: headers)
     end
     return resp
+  end
+
+  private
+  def parse_data(response)
+    if response.is_a?(Net::HTTPSuccess)
+      out = JSON.parse(response.body)
+      return out
+    end
+    # This should be error
+    puts response.body if $debug
+    return nil
   end
 
 end
