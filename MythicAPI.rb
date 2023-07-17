@@ -114,7 +114,7 @@ class MythicAPI < MythicAPI_UI
   # @return [Int] Rank of the Character
   def MythicRank(type, name, realm, region="us")
     char = MythicInit(name, realm)
-    out = MythicRank_RaiderIO(char, type)
+    out = MythicRank_Cache(char, type)
 
     return DataError(name, realm) if !out
     return out
@@ -145,43 +145,51 @@ class MythicAPI < MythicAPI_UI
     return @char_pool.getChar(name, realm, region)
   end
 
+
   # Handlers for Rank chain of responsibilty pattern
+  # (see #MythicRank)
+
+  # Check Character Pool Cache first
+  def MythicRank_Cache(char, type)
+    rank = char.getRank(type)
+    if rank
+      return rank
+    end
+    return MythicRank_RaiderIO(char, type)
+  end
+
+  # Get RaiderIO rank if applicable
   # (see #MythicRank)
   def MythicRank_RaiderIO(char, type)
     if type.include?("world") || type.include?("realm")
-      if !char.getRank(type)
-        name = char.instance_variable_get(:@name)
-        realm = char.instance_variable_get(:@realm)
-        # get data
-        data = @raid.getCharacterData(name, realm)
-        ranks = data["mythic_plus_ranks"]["overall"]
+      # can handle
+      name = char.instance_variable_get(:@name)
+      realm = char.instance_variable_get(:@realm)
+      # get data
+      data = @raid.getCharacterData(name, realm)
+      ranks = data["mythic_plus_ranks"]["overall"]
 
-        # update internals
-        char.setRank("world", ranks["world"])
-        char.setRank("realm", ranks["realm"])
-      end
+      # update internals
+      char.setRank("world", ranks["world"])
+      char.setRank("realm", ranks["realm"])
       return char.getRank(type)
     end
     return MythicRank_App(char, type)
   end
 
-  # Handlers for Rank chain of responsibilty pattern
+  # Get App DB rank if applicable
   # (see #MythicRank)
   def MythicRank_App(char, type)
     if type.include?("app")
-      if !char.getRank(type)
-        name = char.instance_variable_get(:@name)
-        realm = char.instance_variable_get(:@realm)
-        rank = @db.get_app_rank(name, realm)
-        
-        # update internals
-        char.setRank("app", rank)
-      end
+      name = char.instance_variable_get(:@name)
+      realm = char.instance_variable_get(:@realm)
+      rank = @db.get_app_rank(name, realm)
+      
+      # update internals
+      char.setRank("app", rank)
       return char.getRank(type)
     end
-    # Keep adding more types of ranks
-
-    # exit with error
+    # Can't handle anymore
     return nil
   end
 
